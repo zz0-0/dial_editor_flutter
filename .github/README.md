@@ -1,4 +1,4 @@
-# 📜 dial_editor
+# 📜 dial_editor_flutter
 
 **Dial Editor** is a Markdown editor built using Flutter and Riverpod.
 
