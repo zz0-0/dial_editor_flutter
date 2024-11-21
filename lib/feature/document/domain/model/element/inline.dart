@@ -38,5 +38,7 @@ abstract base class Inline extends LinkedListEntry<Inline> {
     bool? isExpanded,
     bool? isBlockStart,
     int? level,
+    int? baseOffset,
+    int? extentOffset,
   });
 }

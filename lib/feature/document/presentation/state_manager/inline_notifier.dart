@@ -70,6 +70,19 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     state = state.copyWith(isExpanded: isExpanded);
   }
 
+  void updateCursorOffset(int cursorOffset) {
+    state =
+        state.copyWith(baseOffset: cursorOffset, extentOffset: cursorOffset);
+  }
+
+  void updateBaseOffset(int baseOffset) {
+    state = state.copyWith(baseOffset: baseOffset);
+  }
+
+  void updateExtentOffset(int extentOffset) {
+    state = state.copyWith(extentOffset: extentOffset);
+  }
+
   // base on the heading level, larger level means deeper nested level
   // which can be expanded or collapsed by upper level
   void toggleExpand() {
@@ -109,7 +122,6 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
         state.unlink();
       }
     }
-    // state = state.copyWith();
   }
 
   void onArrowUp() {
@@ -129,18 +141,26 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
   }
 
   void onArrowLeft({required bool isShiftPressed}) {
-    if (state.previous != null) {
-      ref
-          .read(inlineProvider(state.previous!.key).notifier)
-          .updateToEditngMode();
-      ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+    if (state.textController.selection.extentOffset == 0) {
+      if (state.previous != null) {
+        ref
+            .read(inlineProvider(state.previous!.key).notifier)
+            .updateToEditngMode();
+        ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+      }
     }
   }
 
   void onArrowRight({required bool isShiftPressed}) {
-    if (state.next != null) {
-      ref.read(inlineProvider(state.next!.key).notifier).updateToEditngMode();
-      ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+    if (state.textController.selection.extentOffset ==
+        state.textController.text.length) {
+      if (state.next != null) {
+        ref
+            .read(inlineProvider(state.next!.key).notifier)
+            .updateCursorOffset(0);
+        ref.read(inlineProvider(state.next!.key).notifier).updateToEditngMode();
+        ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+      }
     }
   }
 }
