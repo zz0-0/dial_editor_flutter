@@ -1,4 +1,3 @@
-// export 'package:dial_editor_flutter/feature/document/data/repository_impl/mar.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/document.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/block.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/block/code_block.dart';
@@ -8,7 +7,7 @@ export 'package:dial_editor_flutter/feature/document/domain/model/element/block/
 export 'package:dial_editor_flutter/feature/document/domain/model/element/block/list/unordered_list_block.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/block/math_block.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/block/quote_block.dart';
-// export 'package:dial_editor_flutter/feature/document/domain/model/element/element.dart';
+export 'package:dial_editor_flutter/feature/document/domain/model/element/block/table_block.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/bold.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/bold_italic.dart';
@@ -29,6 +28,8 @@ export 'package:dial_editor_flutter/feature/document/domain/model/element/inline
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/strikethrough.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/subscript.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/superscript.dart';
+export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/table/table_header.dart';
+export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/table/table_line.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/text_node.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/markdown_pattern.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/node.dart';

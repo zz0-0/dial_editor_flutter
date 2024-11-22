@@ -1,5 +1,6 @@
 import 'package:dial_editor_flutter/share/markdown_element.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_notifier_provider.dart';
+import 'package:dial_editor_flutter/share/provider/theme/theme_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,7 +10,8 @@ class RenderUtilNotifier extends Notifier<void> {
     return;
   }
 
-  Text render(BuildContext context, Inline inline) {
+  Widget render(BuildContext context, Inline inline) {
+    final theme = ref.watch(themeProvider);
     final newTextStyle = _getTextStyle(inline);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
@@ -17,6 +19,20 @@ class RenderUtilNotifier extends Notifier<void> {
           .updateTextStyle(newTextStyle);
       ref.read(inlineProvider(inline.key).notifier).updateHeight(context);
     });
+    if (inline is TableHeader || inline is TableLine) {
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: theme == ThemeMode.dark ? Colors.white : Colors.black,
+          ),
+        ),
+        child: Text(
+          inline.text,
+          style: newTextStyle,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
 
     return Text(
       inline.text,
@@ -112,6 +128,10 @@ class RenderUtilNotifier extends Notifier<void> {
         return baseStyle;
 
       case ImageNode:
+        return baseStyle;
+
+      case TableHeader:
+      case TableLine:
         return baseStyle;
 
       default:

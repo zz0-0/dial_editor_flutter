@@ -1,8 +1,4 @@
-import 'package:dial_editor_flutter/feature/document/domain/model/element/inline.dart';
-import 'package:dial_editor_flutter/feature/document/domain/model/element/inline/heading.dart';
-import 'package:dial_editor_flutter/feature/document/domain/model/element/inline/list/ordered_list_node.dart';
-import 'package:dial_editor_flutter/feature/document/domain/model/element/inline/text_node.dart';
-import 'package:dial_editor_flutter/feature/document/domain/model/markdown_pattern.dart';
+import 'package:dial_editor_flutter/share/markdown_element.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_list_async_notifier_provider.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_notifier_provider.dart';
 import 'package:flutter/material.dart';

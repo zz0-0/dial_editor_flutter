@@ -12,6 +12,7 @@ class InlineGatewayImpl implements InlineGateway {
   HeadingBlock? currentHeadingBlock;
   MathBlock? currentMathBlock;
   QuoteBlock? currentQuoteBlock;
+  TableBlock? currentTableBlock;
 
   int level = 1;
 
@@ -155,6 +156,18 @@ class InlineGatewayImpl implements InlineGateway {
           return Quote(text: line.substring(1).trim(), key: key);
         }
       ),
+      (
+        MarkdownPattern.tableHeaderRegex,
+        (String line) {
+          return TableHeader(text: line, key: key);
+        }
+      ),
+      (
+        MarkdownPattern.tableLineRegex,
+        (String line) {
+          return TableLine(text: line, key: key);
+        }
+      ),
     ];
 
     for (final (pattern, builder) in patterns) {
@@ -214,6 +227,13 @@ class InlineGatewayImpl implements InlineGateway {
             QuoteBlock(key: GlobalKey(), level: inline.level + 1);
       }
       inline.level = inline.level + 1;
+    } else if (inline is TableHeader) {
+      if (currentTableBlock == null) {
+        inline.isBlockStart = true;
+        currentTableBlock =
+            TableBlock(key: GlobalKey(), level: inline.level + 1);
+      }
+      inline.level = inline.level + 1;
     } else {
       if (inline is! Heading) {
         currentCodeBlock = null;
@@ -222,6 +242,7 @@ class InlineGatewayImpl implements InlineGateway {
         currentTaskListBlock = null;
         currentUnorderedListBlock = null;
         currentQuoteBlock = null;
+        currentTableBlock = null;
       }
     }
   }

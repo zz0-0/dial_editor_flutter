@@ -37,4 +37,10 @@ class MarkdownPattern {
   static final blockMathRegex = RegExp(r'\$\$(.*?)\$\$');
   static final codeBlockRegex = RegExp(r'^```(?:[^\S\r\n].*)?$');
   static final quoteRegex = RegExp('^>.+');
+  static final tableHeaderRegex = RegExp(
+    r'^\|(?:\s*[^|]+\s*\|)+\s*\n^\|(?:\s*[:-]+[-| :]*)+\|?\s*$',
+  );
+  static final tableLineRegex = RegExp(
+    r'^\|(?:\s*[^|]+\s*\|)+\s*$',
+  );
 }
