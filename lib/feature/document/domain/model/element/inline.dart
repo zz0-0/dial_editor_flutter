@@ -40,5 +40,6 @@ abstract base class Inline extends LinkedListEntry<Inline> {
     int? level,
     int? baseOffset,
     int? extentOffset,
+    String? text,
   });
 }

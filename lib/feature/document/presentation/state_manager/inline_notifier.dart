@@ -1,6 +1,8 @@
 import 'package:dial_editor_flutter/feature/document/domain/model/element/inline.dart';
 import 'package:dial_editor_flutter/feature/document/domain/model/element/inline/heading.dart';
+import 'package:dial_editor_flutter/feature/document/domain/model/element/inline/list/ordered_list_node.dart';
 import 'package:dial_editor_flutter/feature/document/domain/model/element/inline/text_node.dart';
+import 'package:dial_editor_flutter/feature/document/domain/model/markdown_pattern.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_list_async_notifier_provider.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_notifier_provider.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,10 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
       }
       state = inlineLinkedList.elementAt(i).copyWith(isEditing: false);
     }
+  }
+
+  void updateText(String text) {
+    state = state.copyWith(text: text);
   }
 
   void updateTextStyle(TextStyle textStyle) {
@@ -127,7 +133,37 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     final newLine = state.createNewLine();
     ref.read(inlineProvider(newLine.key).notifier).initialize(newLine);
     await ref.read(inlineListProvider.notifier).createNewLine(state, newLine);
-    ref.read(inlineProvider(newLine.key).notifier).updateToEditngMode();
+    if (state is OrderedListNode) {
+      final match = MarkdownPattern.orderListRegex.firstMatch(state.text);
+      if (match != null) {
+        final group = match.group(0);
+        final number = group?.split('.').first;
+        final inlineLinkedList = state.list;
+        var num = 0;
+        var index = 0;
+        if (number != null) {
+          num = int.parse(number);
+          for (var i = 0; i < inlineLinkedList!.length; i++) {
+            if (state == inlineLinkedList.elementAt(i)) {
+              index = i;
+              break;
+            }
+          }
+          for (var i = index + 1; i < inlineLinkedList.length; i++) {
+            if (inlineLinkedList.elementAt(i) is! OrderedListNode) {
+              break;
+            }
+            num++;
+            ref
+                .read(
+                  inlineProvider(inlineLinkedList.elementAt(i).key).notifier,
+                )
+                .updateText('$num. ');
+          }
+        }
+      }
+      ref.read(inlineProvider(newLine.key).notifier).updateToEditngMode();
+    }
   }
 
   void onArrowUp() {

@@ -17,10 +17,11 @@ base class HorizontalRule extends Inline {
     int? level,
     int? baseOffset,
     int? extentOffset,
+    String? text,
   }) {
     final inline = HorizontalRule(
       key: key,
-      text: text,
+      text: text ?? this.text,
     )
       ..textStyle = textStyle ?? this.textStyle
       ..lineHeight = lineHeight ?? this.lineHeight
@@ -28,7 +29,7 @@ base class HorizontalRule extends Inline {
       ..isExpanded = isExpanded ?? this.isExpanded
       ..isBlockStart = isBlockStart ?? this.isBlockStart
       ..level = level ?? this.level;
-    inline.textController.text = textController.text;
+    inline.textController.text = text ?? this.text;
     if (baseOffset != null || extentOffset != null) {
       inline.textController.selection = TextSelection(
         baseOffset: baseOffset ?? textController.selection.baseOffset,
