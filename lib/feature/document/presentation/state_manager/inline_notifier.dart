@@ -113,15 +113,21 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
 
   void selectAll() {}
 
-  void onDelete() {
+  Future<void> onDelete() async {
     if (state.text.isEmpty) {
       if (state.previous != null) {
         final previous = state.previous!;
         ref.read(inlineProvider(previous.key).notifier).updateToEditngMode();
-        ref.read(inlineListProvider.notifier).removeInline(state);
-        state.unlink();
+        await ref.read(inlineListProvider.notifier).removeInline(state);
       }
     }
+  }
+
+  Future<void> onSubmit() async {
+    final newLine = state.createNewLine();
+    ref.read(inlineProvider(newLine.key).notifier).initialize(newLine);
+    await ref.read(inlineListProvider.notifier).createNewLine(state, newLine);
+    ref.read(inlineProvider(newLine.key).notifier).updateToEditngMode();
   }
 
   void onArrowUp() {

@@ -12,6 +12,7 @@ class MarkdownEditingArea extends ConsumerWidget {
     return inlines.when(
       loading: Container.new,
       data: (inlines) => ListView.builder(
+        key: ObjectKey(inlines),
         itemCount: inlines.length,
         itemBuilder: (context, index) {
           final inline = inlines[index];

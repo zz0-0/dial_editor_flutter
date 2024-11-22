@@ -25,10 +25,14 @@ class InlineListAsyncNotifier extends AsyncNotifier<List<Inline>> {
     return inlines;
   }
 
+  Future<void> createNewLine(Inline oldInline, Inline newInline) async {
+    oldInline.insertAfter(newInline);
+    state = AsyncData(oldInline.list!.toList());
+  }
+
   Future<void> removeInline(Inline inline) async {
     final inlines = inline.list;
     inlines!.remove(inline);
-    state = [...inlines] as AsyncValue<List<Inline>>;
-    // state = state.copyWith(list: inlines);
+    state = AsyncData(inlines.toList());
   }
 }

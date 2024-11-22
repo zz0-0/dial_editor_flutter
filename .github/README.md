@@ -51,14 +51,19 @@
     - [ ] Table of content (https://github.com/zz0-0/dial_editor/issues/10)
     - [ ] Video
     - [ ] Page breaks
-  - [ ] **Keyboard Shortcut**
-    - [ ] Ctrl A: Select All
-    - [x] Key Arrow Up
-    - [x] Key Arrow Down
-    - [x] Key Arrow Left
-    - [x] Key Arrow Right
-    - [ ] Tab Indentation
-  - [ ] **Mouse Selection**
+- [ ] **Keyboard Shortcut**
+  - [ ] Ctrl A: Select All
+  - [x] Key Arrow Up
+  - [x] Key Arrow Down
+  - [x] Key Arrow Left
+  - [x] Key Arrow Right
+  - [ ] Tab Indentation
+- [ ] **Mouse Selection**
+- [ ] **Editing**
+  - [ ] Desktop
+    - [x] Hit enter to create new line
+      - [ ] OrderList number
+    - [x] Delete line
 - [x] **Line Number**
 - [ ] **Folder context menu** (https://github.com/zz0-0/dial_editor/issues/34)
 - [ ] **Auto Save**

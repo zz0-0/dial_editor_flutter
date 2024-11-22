@@ -72,9 +72,7 @@ class _EditState extends ConsumerState<Edit> {
   }
 
   void _onSubmit(String value, Inline inline) {
-    inline
-      ..text = value
-      ..isEditing = false;
+    inlineNotifier.onSubmit();
   }
 
   void _selectAll() {
