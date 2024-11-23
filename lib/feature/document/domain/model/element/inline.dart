@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 abstract base class Inline extends LinkedListEntry<Inline> {
   Inline({required this.key, required this.text}) {
-    textController.text = text;
+    textController.text = renderText;
   }
 
   GlobalKey key;
@@ -21,6 +21,7 @@ abstract base class Inline extends LinkedListEntry<Inline> {
   int level = 0;
 
   bool get isEditing => _isEditing;
+
   set isEditing(bool value) {
     _isEditing = value;
     if (_isEditing) {

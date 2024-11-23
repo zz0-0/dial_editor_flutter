@@ -8,6 +8,11 @@ base class Quote extends Inline {
   });
 
   @override
+  Inline createNewLine() {
+    return Quote(key: GlobalKey(), text: '> ');
+  }
+
+  @override
   Quote copyWith({
     TextStyle? textStyle,
     double? lineHeight,

@@ -21,6 +21,7 @@ class InlineGatewayImpl implements InlineGateway {
     final linkedInlines = LinkedList<Inline>();
     for (final line in lines) {
       final inline = convert(line);
+      print(inline.renderText);
       _setCurrentLevel(inline);
       _setBlockStart(inline);
       linkedInlines.add(inline);
@@ -36,11 +37,13 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.headingRegex,
         (String line) {
           final match = MarkdownPattern.customIdHeadingRegex.firstMatch(line)!;
-          final level = match.group(0)!.length;
+          final level = match.group(1)!.length;
+          final content = match.group(2)!;
           return Heading(
             key: key,
             text: line,
           )
+            ..renderText = content
             ..level = level
             ..isBlockStart = true;
         }
@@ -48,28 +51,34 @@ class InlineGatewayImpl implements InlineGateway {
       (
         MarkdownPattern.boldItalicRegex,
         (String line) {
+          final match = MarkdownPattern.boldItalicRegex.firstMatch(line)!;
+          final content = match.group(2)!;
           return BoldItalic(
-            text: line,
             key: key,
-          );
+            text: line,
+          )..renderText = content;
         }
       ),
       (
         MarkdownPattern.boldRegex,
         (String line) {
+          final match = MarkdownPattern.boldRegex.firstMatch(line)!;
+          final content = match.group(2)!;
           return Bold(
             key: key,
             text: line,
-          );
+          )..renderText = content;
         }
       ),
       (
         MarkdownPattern.italicRegex,
         (String line) {
+          final match = MarkdownPattern.italicRegex.firstMatch(line)!;
+          final content = match.group(2)!;
           return Italic(
             key: key,
             text: line,
-          );
+          )..renderText = content;
         }
       ),
       (
@@ -78,16 +87,16 @@ class InlineGatewayImpl implements InlineGateway {
           return UnorderedListNode(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
       (
         MarkdownPattern.orderListRegex,
         (String line) {
           return OrderedListNode(
-            text: line,
             key: key,
-          );
+            text: line,
+          )..renderText = line;
         }
       ),
       (
@@ -96,43 +105,51 @@ class InlineGatewayImpl implements InlineGateway {
           return TaskListNode(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
       (
         MarkdownPattern.strikethroughRegex,
         (String line) {
+          final match = MarkdownPattern.strikethroughRegex.firstMatch(line)!;
+          final content = match.group(1)!;
           return Strikethrough(
             key: key,
             text: line,
-          );
+          )..renderText = content;
         }
       ),
       (
         MarkdownPattern.imageRegex,
         (String line) {
+          final match = MarkdownPattern.imageRegex.firstMatch(line)!;
+          final altText = match.group(1)!;
           return ImageNode(
-            text: line,
             key: key,
-          );
+            text: line,
+          )..renderText = altText;
         }
       ),
       (
         MarkdownPattern.linkRegex,
         (String line) {
+          final match = MarkdownPattern.linkRegex.firstMatch(line)!;
+          final linkText = match.group(1)!;
           return Link(
             key: key,
             text: line,
-          );
+          )..renderText = linkText;
         }
       ),
       (
         MarkdownPattern.highlightRegex,
         (String line) {
+          final match = MarkdownPattern.highlightRegex.firstMatch(line)!;
+          final content = match.group(1)!;
           return Highlight(
             key: key,
             text: line,
-          );
+          )..renderText = content;
         }
       ),
       (
@@ -141,7 +158,7 @@ class InlineGatewayImpl implements InlineGateway {
           return Subscript(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
       (
@@ -150,7 +167,7 @@ class InlineGatewayImpl implements InlineGateway {
           return Superscript(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
       (
@@ -159,7 +176,7 @@ class InlineGatewayImpl implements InlineGateway {
           return HorizontalRule(
             key: key,
             text: line,
-          );
+          )..renderText = '---';
         }
       ),
       (
@@ -168,7 +185,7 @@ class InlineGatewayImpl implements InlineGateway {
           return Math(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
       // (
@@ -186,13 +203,16 @@ class InlineGatewayImpl implements InlineGateway {
             key: key,
             text: line,
             isCodeBlockStartMarker: language.isNotEmpty,
-          );
+          )..renderText = '';
         }
       ),
       (
         MarkdownPattern.quoteRegex,
         (String line) {
-          return Quote(text: line.substring(1).trim(), key: key);
+          return Quote(
+            key: key,
+            text: line,
+          )..renderText = line;
         }
       ),
       (
@@ -201,7 +221,7 @@ class InlineGatewayImpl implements InlineGateway {
           return TableHeader(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
       (
@@ -210,22 +230,20 @@ class InlineGatewayImpl implements InlineGateway {
           return TableLine(
             key: key,
             text: line,
-          );
+          )..renderText = line;
         }
       ),
     ];
 
     for (final (pattern, builder) in patterns) {
       if (pattern.hasMatch(line)) {
-        return builder(line)
-          ..renderText =
-              line.replaceAllMapped(pattern, (match) => match.group(0)!);
+        return builder(line);
       }
     }
     return TextNode(
       key: key,
       text: line,
-    );
+    )..renderText = line;
   }
 
   void _setCurrentLevel(Inline inline) {

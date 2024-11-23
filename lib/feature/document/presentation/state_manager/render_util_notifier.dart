@@ -35,7 +35,7 @@ class RenderUtilNotifier extends Notifier<void> {
     }
 
     return Text(
-      inline.text,
+      inline.renderText,
       style: newTextStyle,
     );
   }
