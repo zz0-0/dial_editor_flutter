@@ -9,7 +9,7 @@ base class UnorderedListNode extends Inline {
 
   @override
   Inline createNewLine() {
-    return UnorderedListNode(key: GlobalKey(), text: '');
+    return UnorderedListNode(key: GlobalKey(), text: '- ');
   }
 
   @override

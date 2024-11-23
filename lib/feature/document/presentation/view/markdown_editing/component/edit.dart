@@ -31,7 +31,7 @@ class _EditState extends ConsumerState<Edit> {
           cursorColor: Colors.blue,
           backgroundCursorColor: Colors.blue,
           selectionColor: Colors.red,
-          onChanged: (value) => _onChnage(value, widget.inline),
+          onChanged: (value) => _onChnage(context, value, widget.inline),
           onSubmitted: (value) => _onSubmit(value, widget.inline),
         ),
       ),
@@ -67,8 +67,8 @@ class _EditState extends ConsumerState<Edit> {
     return KeyEventResult.ignored;
   }
 
-  void _onChnage(String value, Inline inline) {
-    inline.text = value;
+  void _onChnage(BuildContext context, String value, Inline inline) {
+    inlineNotifier.onChange(context, value, inline);
   }
 
   void _onSubmit(String value, Inline inline) {

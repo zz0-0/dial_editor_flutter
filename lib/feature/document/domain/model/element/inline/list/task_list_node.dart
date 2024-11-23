@@ -9,7 +9,7 @@ base class TaskListNode extends Inline {
 
   @override
   Inline createNewLine() {
-    return TaskListNode(key: GlobalKey(), text: '');
+    return TaskListNode(key: GlobalKey(), text: '- [ ] ');
   }
 
   @override

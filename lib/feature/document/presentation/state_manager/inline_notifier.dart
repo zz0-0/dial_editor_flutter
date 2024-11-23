@@ -1,10 +1,16 @@
+import 'package:dial_editor_flutter/feature/document/data/gateway_impl/inline_gateway_impl.dart';
+import 'package:dial_editor_flutter/feature/document/domain/gateway/gateway/inline_gateway.dart';
+import 'package:dial_editor_flutter/feature/document/domain/use_case/convert_line_use_case.dart';
 import 'package:dial_editor_flutter/share/markdown_element.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_list_async_notifier_provider.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_notifier_provider.dart';
+import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/render_utility_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
+  late InlineGateway _inlineGateway;
+
   @override
   Inline build(GlobalKey arg) {
     return TextNode(key: arg, text: '');
@@ -77,6 +83,10 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
         state.copyWith(baseOffset: cursorOffset, extentOffset: cursorOffset);
   }
 
+  void updateSelection(int baseOffset, int extentOffset) {
+    state = state.copyWith(baseOffset: baseOffset, extentOffset: extentOffset);
+  }
+
   void updateBaseOffset(int baseOffset) {
     state = state.copyWith(baseOffset: baseOffset);
   }
@@ -113,7 +123,29 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     }
   }
 
-  void selectAll() {}
+  void selectAll() {
+    final inlineLinkedList = state.list;
+    for (var i = 0; i < inlineLinkedList!.length; i++) {
+      ref
+          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .updateToEditngMode();
+      ref
+          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .updateSelection(0, inlineLinkedList.elementAt(i).text.length);
+    }
+  }
+
+  void resetAll() {
+    final inlineLinkedList = state.list;
+    for (var i = 0; i < inlineLinkedList!.length; i++) {
+      ref
+          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .updateToDisplayMode();
+      ref
+          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .updateCursorOffset(0);
+    }
+  }
 
   Future<void> onDelete() async {
     if (state.text.isEmpty) {
@@ -123,6 +155,20 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
         await ref.read(inlineListProvider.notifier).removeInline(state);
       }
     }
+  }
+
+  void onChange(BuildContext context, String value, Inline inline) {
+    _inlineGateway = InlineGatewayImpl();
+    final newInline = ConvertLineUseCase(_inlineGateway)(value);
+    final newWidget =
+        ref.read(renderUtilProvider.notifier).render(context, newInline);
+    ref.read(inlineProvider(inline.key).notifier).updateText(value);
+    ref
+        .read(inlineProvider(inline.key).notifier)
+        .updateTextStyle((newWidget as Text).style!);
+    ref
+        .read(inlineProvider(inline.key).notifier)
+        .updateCursorOffset(inline.textController.selection.baseOffset);
   }
 
   Future<void> onSubmit() async {
@@ -164,6 +210,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
 
   void onArrowUp() {
     if (state.previous != null) {
+      ref.read(inlineProvider(state.key).notifier).resetAll();
       ref
           .read(inlineProvider(state.previous!.key).notifier)
           .updateToEditngMode();
@@ -173,6 +220,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
 
   void onArrowDown() {
     if (state.next != null) {
+      ref.read(inlineProvider(state.key).notifier).resetAll();
       ref.read(inlineProvider(state.next!.key).notifier).updateToEditngMode();
       ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
     }
@@ -181,6 +229,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
   void onArrowLeft({required bool isShiftPressed}) {
     if (state.textController.selection.extentOffset == 0) {
       if (state.previous != null) {
+        ref.read(inlineProvider(state.key).notifier).resetAll();
         ref
             .read(inlineProvider(state.previous!.key).notifier)
             .updateToEditngMode();
@@ -193,6 +242,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     if (state.textController.selection.extentOffset ==
         state.textController.text.length) {
       if (state.next != null) {
+        ref.read(inlineProvider(state.key).notifier).resetAll();
         ref
             .read(inlineProvider(state.next!.key).notifier)
             .updateCursorOffset(0);
