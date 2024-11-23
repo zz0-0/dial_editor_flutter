@@ -29,11 +29,11 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
   // new inline is reconnected to the linked list correctly.
   void updateToEditngMode() {
     // resetAllToDisplayMode();
-    state = state.copyWith(isEditing: true)..focusNode.requestFocus();
+    state = state.copyWith(isEditing: true);
   }
 
   void updateToDisplayMode() {
-    state = state.copyWith(isEditing: false)..focusNode.unfocus();
+    state = state.copyWith(isEditing: false);
   }
 
   void resetAllToDisplayMode() {

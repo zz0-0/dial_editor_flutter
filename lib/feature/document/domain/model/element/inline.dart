@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 abstract base class Inline extends LinkedListEntry<Inline> {
   Inline({required this.key, required this.text}) {
-    renderText = text;
     textController.text = text;
   }
 
@@ -16,10 +15,22 @@ abstract base class Inline extends LinkedListEntry<Inline> {
   FocusNode focusNode = FocusNode();
   TextStyle textStyle = const TextStyle();
   double? lineHeight;
-  bool isEditing = false;
+  bool _isEditing = false;
   bool isExpanded = true;
   bool isBlockStart = false;
   int level = 0;
+
+  bool get isEditing => _isEditing;
+  set isEditing(bool value) {
+    _isEditing = value;
+    if (_isEditing) {
+      textController.text = text;
+      focusNode.requestFocus();
+    } else {
+      textController.text = renderText;
+      focusNode.unfocus();
+    }
+  }
 
   Inline createNewLine() {
     return TextNode(key: GlobalKey(), text: '');

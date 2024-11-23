@@ -5,9 +5,7 @@ base class Underline extends Inline {
   Underline({
     required super.key,
     required super.text,
-  }) {
-    renderText = text;
-  }
+  });
 
   @override
   Underline copyWith({

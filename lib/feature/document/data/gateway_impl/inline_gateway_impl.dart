@@ -36,8 +36,11 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.headingRegex,
         (String line) {
           final match = MarkdownPattern.customIdHeadingRegex.firstMatch(line)!;
-          final level = match.group(1)!.length;
-          return Heading(text: line, key: key)
+          final level = match.group(0)!.length;
+          return Heading(
+            key: key,
+            text: line,
+          )
             ..level = level
             ..isBlockStart = true;
         }
@@ -45,25 +48,37 @@ class InlineGatewayImpl implements InlineGateway {
       (
         MarkdownPattern.boldItalicRegex,
         (String line) {
-          return BoldItalic(text: line, key: key);
+          return BoldItalic(
+            text: line,
+            key: key,
+          );
         }
       ),
       (
         MarkdownPattern.boldRegex,
         (String line) {
-          return Bold(text: line, key: key);
+          return Bold(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.italicRegex,
         (String line) {
-          return Italic(text: line, key: key);
+          return Italic(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.unorderedListRegex,
         (String line) {
-          return UnorderedListNode(text: line, key: key);
+          return UnorderedListNode(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
@@ -78,13 +93,19 @@ class InlineGatewayImpl implements InlineGateway {
       (
         MarkdownPattern.taskListRegex,
         (String line) {
-          return TaskListNode(text: line, key: key);
+          return TaskListNode(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.strikethroughRegex,
         (String line) {
-          return Strikethrough(text: line, key: key);
+          return Strikethrough(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
@@ -99,37 +120,55 @@ class InlineGatewayImpl implements InlineGateway {
       (
         MarkdownPattern.linkRegex,
         (String line) {
-          return Link(text: line, key: key);
+          return Link(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.highlightRegex,
         (String line) {
-          return Highlight(text: line, key: key);
+          return Highlight(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.subscriptRegex,
         (String line) {
-          return Subscript(text: line, key: key);
+          return Subscript(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.superscriptRegex,
         (String line) {
-          return Superscript(text: line, key: key);
+          return Superscript(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.horizontalRuleRegex,
         (String line) {
-          return HorizontalRule(text: line, key: key);
+          return HorizontalRule(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.inlineMathRegex,
         (String line) {
-          return Math(text: line, key: key);
+          return Math(
+            key: key,
+            text: line,
+          );
         }
       ),
       // (
@@ -159,23 +198,34 @@ class InlineGatewayImpl implements InlineGateway {
       (
         MarkdownPattern.tableHeaderRegex,
         (String line) {
-          return TableHeader(text: line, key: key);
+          return TableHeader(
+            key: key,
+            text: line,
+          );
         }
       ),
       (
         MarkdownPattern.tableLineRegex,
         (String line) {
-          return TableLine(text: line, key: key);
+          return TableLine(
+            key: key,
+            text: line,
+          );
         }
       ),
     ];
 
     for (final (pattern, builder) in patterns) {
       if (pattern.hasMatch(line)) {
-        return builder(line);
+        return builder(line)
+          ..renderText =
+              line.replaceAllMapped(pattern, (match) => match.group(0)!);
       }
     }
-    return TextNode(text: line, key: key);
+    return TextNode(
+      key: key,
+      text: line,
+    );
   }
 
   void _setCurrentLevel(Inline inline) {

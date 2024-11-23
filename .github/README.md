@@ -14,6 +14,8 @@
 
 ## 🛠️ To-Do
 
+<details> <summary>Tap to expand</summary>
+
 - [ ] **Markdown Support**
   - [ ] **Markdown Parser**: Implement a parser for converting Markdown text into structured data. **Markdown Render**: Develop a renderer to display Markdown content with proper formatting.
     - [ ] Heading (https://github.com/zz0-0/dial_editor/issues/34)
@@ -93,6 +95,8 @@
 - [ ] **Infinite Canvas**: Interchangeable markdown canvas that constructs and edits your markdown file visually (https://github.com/zz0-0/dial_editor/issues/16)
   - [ ] standalone canvas view (https://github.com/zz0-0/dial_editor/issues/42)
   - [ ] integrate with markdown file (https://github.com/zz0-0/dial_editor/issues/43)
+
+</details>
 
 ## 🖥️ Getting Started
 
