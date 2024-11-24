@@ -5,11 +5,12 @@ base class CodeLine extends Inline {
   CodeLine({
     required super.key,
     required super.text,
+    required super.renderText,
   });
 
   @override
   Inline createNewLine() {
-    return CodeLine(key: GlobalKey(), text: '');
+    return CodeLine(key: GlobalKey(), text: '', renderText: '');
   }
 
   @override
@@ -23,10 +24,12 @@ base class CodeLine extends Inline {
     int? baseOffset,
     int? extentOffset,
     String? text,
+    String? renderText,
   }) {
     final inline = CodeLine(
       key: key,
       text: text ?? this.text,
+      renderText: renderText ?? this.renderText,
     )
       ..textStyle = textStyle ?? this.textStyle
       ..lineHeight = lineHeight ?? this.lineHeight
@@ -34,14 +37,12 @@ base class CodeLine extends Inline {
       ..isExpanded = isExpanded ?? this.isExpanded
       ..isBlockStart = isBlockStart ?? this.isBlockStart
       ..level = level ?? this.level;
-    inline.textController.text = text ?? this.text;
+
     if (baseOffset != null || extentOffset != null) {
       inline.textController.selection = TextSelection(
         baseOffset: baseOffset ?? textController.selection.baseOffset,
         extentOffset: extentOffset ?? textController.selection.extentOffset,
       );
-    } else {
-      inline.textController.selection = textController.selection;
     }
     replaceInline(this, inline);
     return inline;

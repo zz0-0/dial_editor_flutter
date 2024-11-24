@@ -21,7 +21,6 @@ class InlineGatewayImpl implements InlineGateway {
     final linkedInlines = LinkedList<Inline>();
     for (final line in lines) {
       final inline = convert(line);
-      print(inline.renderText);
       _setCurrentLevel(inline);
       _setBlockStart(inline);
       linkedInlines.add(inline);
@@ -42,8 +41,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Heading(
             key: key,
             text: line,
+            renderText: content,
           )
-            ..renderText = content
             ..level = level
             ..isBlockStart = true;
         }
@@ -56,7 +55,8 @@ class InlineGatewayImpl implements InlineGateway {
           return BoldItalic(
             key: key,
             text: line,
-          )..renderText = content;
+            renderText: content,
+          );
         }
       ),
       (
@@ -67,7 +67,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Bold(
             key: key,
             text: line,
-          )..renderText = content;
+            renderText: content,
+          );
         }
       ),
       (
@@ -78,7 +79,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Italic(
             key: key,
             text: line,
-          )..renderText = content;
+            renderText: content,
+          );
         }
       ),
       (
@@ -87,7 +89,8 @@ class InlineGatewayImpl implements InlineGateway {
           return UnorderedListNode(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -96,7 +99,8 @@ class InlineGatewayImpl implements InlineGateway {
           return OrderedListNode(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -105,7 +109,8 @@ class InlineGatewayImpl implements InlineGateway {
           return TaskListNode(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -116,7 +121,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Strikethrough(
             key: key,
             text: line,
-          )..renderText = content;
+            renderText: content,
+          );
         }
       ),
       (
@@ -127,7 +133,8 @@ class InlineGatewayImpl implements InlineGateway {
           return ImageNode(
             key: key,
             text: line,
-          )..renderText = altText;
+            renderText: altText,
+          );
         }
       ),
       (
@@ -138,7 +145,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Link(
             key: key,
             text: line,
-          )..renderText = linkText;
+            renderText: linkText,
+          );
         }
       ),
       (
@@ -149,7 +157,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Highlight(
             key: key,
             text: line,
-          )..renderText = content;
+            renderText: content,
+          );
         }
       ),
       (
@@ -158,7 +167,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Subscript(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -167,7 +177,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Superscript(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -176,7 +187,8 @@ class InlineGatewayImpl implements InlineGateway {
           return HorizontalRule(
             key: key,
             text: line,
-          )..renderText = '---';
+            renderText: '---',
+          );
         }
       ),
       (
@@ -185,7 +197,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Math(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       // (
@@ -202,8 +215,9 @@ class InlineGatewayImpl implements InlineGateway {
           return CodeBlockMarker(
             key: key,
             text: line,
+            renderText: '```$language',
             isCodeBlockStartMarker: language.isNotEmpty,
-          )..renderText = '';
+          );
         }
       ),
       (
@@ -212,7 +226,8 @@ class InlineGatewayImpl implements InlineGateway {
           return Quote(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -221,7 +236,8 @@ class InlineGatewayImpl implements InlineGateway {
           return TableHeader(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
       (
@@ -230,7 +246,8 @@ class InlineGatewayImpl implements InlineGateway {
           return TableLine(
             key: key,
             text: line,
-          )..renderText = line;
+            renderText: line,
+          );
         }
       ),
     ];
@@ -243,7 +260,8 @@ class InlineGatewayImpl implements InlineGateway {
     return TextNode(
       key: key,
       text: line,
-    )..renderText = line;
+      renderText: line,
+    );
   }
 
   void _setCurrentLevel(Inline inline) {

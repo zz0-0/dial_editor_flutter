@@ -13,7 +13,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
 
   @override
   Inline build(GlobalKey arg) {
-    return TextNode(key: arg, text: '');
+    return TextNode(key: arg, text: '', renderText: '');
   }
 
   // ignore: use_setters_to_change_properties
@@ -28,7 +28,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
   // will be broken, therefore, the index is needed to make sure the
   // new inline is reconnected to the linked list correctly.
   void updateToEditngMode() {
-    // resetAllToDisplayMode();
+    resetAll();
     state = state.copyWith(isEditing: true);
   }
 
@@ -36,18 +36,8 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     state = state.copyWith(isEditing: false);
   }
 
-  void resetAllToDisplayMode() {
-    final inlineLinkedList = state.list;
-    for (var i = 0; i < inlineLinkedList!.length; i++) {
-      if (inlineLinkedList.elementAt(i) == state) {
-        continue;
-      }
-      state = inlineLinkedList.elementAt(i).copyWith(isEditing: false);
-    }
-  }
-
-  void updateText(String text) {
-    state = state.copyWith(text: text);
+  void updateText(String text, String renderText) {
+    state = state.copyWith(text: text, renderText: renderText);
   }
 
   void updateTextStyle(TextStyle textStyle) {
@@ -143,7 +133,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
           .updateToDisplayMode();
       ref
           .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
-          .updateCursorOffset(0);
+          .updateCursorOffset(inlineLinkedList.elementAt(i).renderText.length);
     }
   }
 
@@ -162,7 +152,9 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     final newInline = ConvertLineUseCase(_inlineGateway)(value);
     final newWidget =
         ref.read(renderUtilProvider.notifier).render(context, newInline);
-    ref.read(inlineProvider(inline.key).notifier).updateText(value);
+    ref
+        .read(inlineProvider(inline.key).notifier)
+        .updateText(value, newInline.renderText);
     ref
         .read(inlineProvider(inline.key).notifier)
         .updateTextStyle((newWidget as Text).style!);
@@ -200,7 +192,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
                 .read(
                   inlineProvider(inlineLinkedList.elementAt(i).key).notifier,
                 )
-                .updateText('$num. ');
+                .updateText('$num. ', '$num. ');
           }
         }
       }

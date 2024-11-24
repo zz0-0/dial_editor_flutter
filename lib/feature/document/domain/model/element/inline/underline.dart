@@ -5,6 +5,7 @@ base class Underline extends Inline {
   Underline({
     required super.key,
     required super.text,
+    required super.renderText,
   });
 
   @override
@@ -18,10 +19,12 @@ base class Underline extends Inline {
     int? baseOffset,
     int? extentOffset,
     String? text,
+    String? renderText,
   }) {
     final inline = Underline(
       key: key,
       text: text ?? this.text,
+      renderText: renderText ?? this.renderText,
     )
       ..textStyle = textStyle ?? this.textStyle
       ..lineHeight = lineHeight ?? this.lineHeight
@@ -29,14 +32,12 @@ base class Underline extends Inline {
       ..isExpanded = isExpanded ?? this.isExpanded
       ..isBlockStart = isBlockStart ?? this.isBlockStart
       ..level = level ?? this.level;
-    inline.textController.text = text ?? this.text;
+
     if (baseOffset != null || extentOffset != null) {
       inline.textController.selection = TextSelection(
         baseOffset: baseOffset ?? textController.selection.baseOffset,
         extentOffset: extentOffset ?? textController.selection.extentOffset,
       );
-    } else {
-      inline.textController.selection = textController.selection;
     }
     replaceInline(this, inline);
     return inline;

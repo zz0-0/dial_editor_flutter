@@ -5,6 +5,7 @@ base class CodeBlockMarker extends Inline {
   CodeBlockMarker({
     required super.key,
     required super.text,
+    required super.renderText,
     required this.isCodeBlockStartMarker,
   });
 
@@ -13,9 +14,9 @@ base class CodeBlockMarker extends Inline {
   @override
   Inline createNewLine() {
     if (isBlockStart) {
-      return CodeLine(key: GlobalKey(), text: '');
+      return CodeLine(key: GlobalKey(), text: '', renderText: '');
     }
-    return TextNode(key: GlobalKey(), text: '');
+    return TextNode(key: GlobalKey(), text: '', renderText: '');
   }
 
   @override
@@ -29,10 +30,12 @@ base class CodeBlockMarker extends Inline {
     int? baseOffset,
     int? extentOffset,
     String? text,
+    String? renderText,
   }) {
     final inline = CodeBlockMarker(
       key: key,
       text: text ?? this.text,
+      renderText: renderText ?? this.renderText,
       isCodeBlockStartMarker: isCodeBlockStartMarker,
     )
       ..textStyle = textStyle ?? this.textStyle
@@ -41,14 +44,12 @@ base class CodeBlockMarker extends Inline {
       ..isExpanded = isExpanded ?? this.isExpanded
       ..isBlockStart = isBlockStart ?? this.isBlockStart
       ..level = level ?? this.level;
-    inline.textController.text = text ?? this.text;
+
     if (baseOffset != null || extentOffset != null) {
       inline.textController.selection = TextSelection(
         baseOffset: baseOffset ?? textController.selection.baseOffset,
         extentOffset: extentOffset ?? textController.selection.extentOffset,
       );
-    } else {
-      inline.textController.selection = textController.selection;
     }
     replaceInline(this, inline);
     return inline;

@@ -3,7 +3,11 @@ import 'package:dial_editor_flutter/feature/document/domain/model/element/inline
 import 'package:flutter/material.dart';
 
 base class TableHeader extends Inline {
-  TableHeader({required super.key, required super.text});
+  TableHeader({
+    required super.key,
+    required super.text,
+    required super.renderText,
+  });
 
   @override
   Inline copyWith({
@@ -16,12 +20,13 @@ base class TableHeader extends Inline {
     int? baseOffset,
     int? extentOffset,
     String? text,
+    String? renderText,
   }) {
     throw UnimplementedError();
   }
 
   @override
   Inline createNewLine() {
-    return TableLine(key: key, text: '');
+    return TableLine(key: key, text: '', renderText: '');
   }
 }

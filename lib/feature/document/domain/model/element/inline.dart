@@ -4,13 +4,13 @@ import 'package:dial_editor_flutter/share/markdown_element.dart';
 import 'package:flutter/material.dart';
 
 abstract base class Inline extends LinkedListEntry<Inline> {
-  Inline({required this.key, required this.text}) {
+  Inline({required this.key, required this.text, required this.renderText}) {
     textController.text = renderText;
   }
 
   GlobalKey key;
   String text;
-  String renderText = '';
+  String renderText;
   TextEditingController textController = TextEditingController();
   FocusNode focusNode = FocusNode();
   TextStyle textStyle = const TextStyle();
@@ -34,7 +34,7 @@ abstract base class Inline extends LinkedListEntry<Inline> {
   }
 
   Inline createNewLine() {
-    return TextNode(key: GlobalKey(), text: '');
+    return TextNode(key: GlobalKey(), text: '', renderText: '');
   }
 
   void replaceInline(Inline oldInline, Inline newInline) {
@@ -53,5 +53,6 @@ abstract base class Inline extends LinkedListEntry<Inline> {
     int? baseOffset,
     int? extentOffset,
     String? text,
+    String? renderText,
   });
 }
