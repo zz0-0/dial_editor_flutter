@@ -13,13 +13,13 @@ class FileLocalDataSourceImpl implements FileLocalDataSource {
   Ref ref;
   @override
   Future<File> readFile() async {
-    final key = ref.watch(fileKeyProvider);
-    return await ref.watch(fileProvider(key!))!;
+    final id = ref.watch(fileIdProvider);
+    return await ref.watch(fileProvider(id!))!;
   }
 
   @override
   Future<void> writeFile(String content) async {
-    final key = ref.watch(fileKeyProvider);
-    return ref.watch(fileProvider(key!))!.writeAsStringSync(content);
+    final id = ref.watch(fileIdProvider);
+    return ref.watch(fileProvider(id!))!.writeAsStringSync(content);
   }
 }

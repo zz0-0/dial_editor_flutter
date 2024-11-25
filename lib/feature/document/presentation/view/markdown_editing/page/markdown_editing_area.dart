@@ -17,7 +17,7 @@ class MarkdownEditingArea extends ConsumerWidget {
         itemBuilder: (context, index) {
           final inline = inlines[index];
           return Line(
-            inlineKey: inline.key,
+            inlineId: inline.id,
             index: index,
           );
         },

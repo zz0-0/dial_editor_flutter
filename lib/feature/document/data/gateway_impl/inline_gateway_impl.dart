@@ -1,8 +1,9 @@
 import 'dart:collection';
 
 import 'package:dial_editor_flutter/feature/document/domain/gateway/gateway/inline_gateway.dart';
+import 'package:dial_editor_flutter/feature/document/domain/model/element.dart';
 import 'package:dial_editor_flutter/share/markdown_element.dart';
-import 'package:flutter/material.dart';
+import 'package:dial_editor_flutter/share/uuid.dart';
 
 class InlineGatewayImpl implements InlineGateway {
   OrderedListBlock? currentOrderedListBlock;
@@ -25,12 +26,13 @@ class InlineGatewayImpl implements InlineGateway {
       _setBlockStart(inline);
       linkedInlines.add(inline);
     }
-    return Document(inlines: linkedInlines);
+    final elementId = ElementId(uuid.v4(), ElementType.document);
+    return Document(id: elementId, inlines: linkedInlines);
   }
 
   @override
   Inline convert(String line) {
-    final key = GlobalKey();
+    final elementId = ElementId(uuid.v4(), ElementType.inline);
     final patterns = [
       (
         MarkdownPattern.headingRegex,
@@ -39,7 +41,7 @@ class InlineGatewayImpl implements InlineGateway {
           final level = match.group(1)!.length;
           final content = match.group(2)!;
           return Heading(
-            key: key,
+            id: elementId,
             text: line,
             renderText: content,
           )
@@ -53,7 +55,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.boldItalicRegex.firstMatch(line)!;
           final content = match.group(2)!;
           return BoldItalic(
-            key: key,
+            id: elementId,
             text: line,
             renderText: content,
           );
@@ -65,7 +67,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.boldRegex.firstMatch(line)!;
           final content = match.group(2)!;
           return Bold(
-            key: key,
+            id: elementId,
             text: line,
             renderText: content,
           );
@@ -77,7 +79,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.italicRegex.firstMatch(line)!;
           final content = match.group(2)!;
           return Italic(
-            key: key,
+            id: elementId,
             text: line,
             renderText: content,
           );
@@ -87,7 +89,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.unorderedListRegex,
         (String line) {
           return UnorderedListNode(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -97,7 +99,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.orderListRegex,
         (String line) {
           return OrderedListNode(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -107,7 +109,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.taskListRegex,
         (String line) {
           return TaskListNode(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -119,7 +121,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.strikethroughRegex.firstMatch(line)!;
           final content = match.group(1)!;
           return Strikethrough(
-            key: key,
+            id: elementId,
             text: line,
             renderText: content,
           );
@@ -131,7 +133,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.imageRegex.firstMatch(line)!;
           final altText = match.group(1)!;
           return ImageNode(
-            key: key,
+            id: elementId,
             text: line,
             renderText: altText,
           );
@@ -143,7 +145,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.linkRegex.firstMatch(line)!;
           final linkText = match.group(1)!;
           return Link(
-            key: key,
+            id: elementId,
             text: line,
             renderText: linkText,
           );
@@ -155,7 +157,7 @@ class InlineGatewayImpl implements InlineGateway {
           final match = MarkdownPattern.highlightRegex.firstMatch(line)!;
           final content = match.group(1)!;
           return Highlight(
-            key: key,
+            id: elementId,
             text: line,
             renderText: content,
           );
@@ -165,7 +167,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.subscriptRegex,
         (String line) {
           return Subscript(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -175,7 +177,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.superscriptRegex,
         (String line) {
           return Superscript(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -185,7 +187,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.horizontalRuleRegex,
         (String line) {
           return HorizontalRule(
-            key: key,
+            id: elementId,
             text: line,
             renderText: '---',
           );
@@ -195,7 +197,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.inlineMathRegex,
         (String line) {
           return Math(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -213,7 +215,7 @@ class InlineGatewayImpl implements InlineGateway {
         (String line) {
           final language = line.substring(3).trim();
           return CodeBlockMarker(
-            key: key,
+            id: elementId,
             text: line,
             renderText: '```$language',
             isCodeBlockStartMarker: language.isNotEmpty,
@@ -224,7 +226,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.quoteRegex,
         (String line) {
           return Quote(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -234,7 +236,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.tableHeaderRegex,
         (String line) {
           return TableHeader(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -244,7 +246,7 @@ class InlineGatewayImpl implements InlineGateway {
         MarkdownPattern.tableLineRegex,
         (String line) {
           return TableLine(
-            key: key,
+            id: elementId,
             text: line,
             renderText: line,
           );
@@ -258,7 +260,7 @@ class InlineGatewayImpl implements InlineGateway {
       }
     }
     return TextNode(
-      key: key,
+      id: elementId,
       text: line,
       renderText: line,
     );
@@ -273,51 +275,50 @@ class InlineGatewayImpl implements InlineGateway {
   }
 
   void _setBlockStart(Inline inline) {
+    final elementId = ElementId(uuid.v4(), ElementType.inline);
     if (inline is OrderedListNode) {
       if (currentOrderedListBlock == null) {
         inline.isBlockStart = true;
         currentOrderedListBlock =
-            OrderedListBlock(key: GlobalKey(), level: inline.level + 1);
+            OrderedListBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else if (inline is TaskListNode) {
       if (currentTaskListBlock == null) {
         inline.isBlockStart = true;
         currentTaskListBlock =
-            TaskListBlock(key: GlobalKey(), level: inline.level + 1);
+            TaskListBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else if (inline is UnorderedListNode) {
       if (currentUnorderedListBlock == null) {
         inline.isBlockStart = true;
         currentUnorderedListBlock =
-            UnorderedListBlock(key: GlobalKey(), level: inline.level + 1);
+            UnorderedListBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else if (inline is CodeBlockMarker) {
       if (currentCodeBlock == null) {
         inline.isBlockStart = true;
-        currentCodeBlock = CodeBlock(key: GlobalKey(), level: inline.level + 1);
+        currentCodeBlock = CodeBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else if (inline is Math) {
       if (currentMathBlock == null) {
         inline.isBlockStart = true;
-        currentMathBlock = MathBlock(key: GlobalKey(), level: inline.level + 1);
+        currentMathBlock = MathBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else if (inline is Quote) {
       if (currentQuoteBlock == null) {
         inline.isBlockStart = true;
-        currentQuoteBlock =
-            QuoteBlock(key: GlobalKey(), level: inline.level + 1);
+        currentQuoteBlock = QuoteBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else if (inline is TableHeader) {
       if (currentTableBlock == null) {
         inline.isBlockStart = true;
-        currentTableBlock =
-            TableBlock(key: GlobalKey(), level: inline.level + 1);
+        currentTableBlock = TableBlock(id: elementId, level: inline.level + 1);
       }
       inline.level = inline.level + 1;
     } else {

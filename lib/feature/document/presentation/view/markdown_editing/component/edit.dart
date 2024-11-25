@@ -19,7 +19,7 @@ class _EditState extends ConsumerState<Edit> {
 
   @override
   Widget build(BuildContext context) {
-    inlineNotifier = ref.read(inlineProvider(widget.inline.key).notifier);
+    inlineNotifier = ref.read(inlineProvider(widget.inline.id).notifier);
     return Focus(
       onKeyEvent: (node, event) => _onKeyEvent(event, widget.inline),
       child: SizedBox(

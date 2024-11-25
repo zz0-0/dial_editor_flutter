@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 base class Strikethrough extends Inline {
   Strikethrough({
-    required super.key,
+    required super.id,
     required super.text,
     required super.renderText,
   });
@@ -22,7 +22,7 @@ base class Strikethrough extends Inline {
     String? renderText,
   }) {
     final inline = Strikethrough(
-      key: key,
+      id: id,
       text: text ?? this.text,
       renderText: renderText ?? this.renderText,
     )

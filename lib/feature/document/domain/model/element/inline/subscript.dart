@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 base class Subscript extends Inline {
   Subscript({
-    required super.key,
+    required super.id,
     required super.text,
     required super.renderText,
   });
@@ -22,7 +22,7 @@ base class Subscript extends Inline {
     String? renderText,
   }) {
     final inline = Subscript(
-      key: key,
+      id: id,
       text: text ?? this.text,
       renderText: renderText ?? this.renderText,
     )

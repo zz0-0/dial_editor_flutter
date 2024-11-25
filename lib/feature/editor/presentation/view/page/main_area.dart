@@ -11,7 +11,7 @@ class MainArea extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final key = ref.watch(fileKeyProvider);
+    final id = ref.watch(fileIdProvider);
     return Column(
       children: [
         if (ref.watch(openedFilesProvider).isNotEmpty) const TabNav(),
@@ -19,7 +19,7 @@ class MainArea extends ConsumerWidget {
           child: Column(
             children: [
               if (ref.watch(openedFilesProvider).isNotEmpty) const Segment(),
-              if (key != null)
+              if (id != null)
                 Expanded(child: ref.watch(markdownEditingAreaProvider)),
             ],
           ),

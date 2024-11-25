@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 base class TableLine extends Inline {
   TableLine({
-    required super.key,
+    required super.id,
     required super.text,
     required super.renderText,
   });

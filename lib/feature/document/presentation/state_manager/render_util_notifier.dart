@@ -15,9 +15,9 @@ class RenderUtilNotifier extends Notifier<void> {
     final newTextStyle = _getTextStyle(inline);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(inlineProvider(inline.key).notifier)
+          .read(inlineProvider(inline.id).notifier)
           .updateTextStyle(newTextStyle);
-      ref.read(inlineProvider(inline.key).notifier).updateHeight(context);
+      ref.read(inlineProvider(inline.id).notifier).updateHeight(context);
     });
     if (inline is TableHeader || inline is TableLine) {
       return Container(

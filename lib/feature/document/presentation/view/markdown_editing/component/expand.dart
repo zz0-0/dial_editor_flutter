@@ -16,7 +16,7 @@ class Expand extends ConsumerWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
-            ref.read(inlineProvider(inline.key).notifier).toggleExpand();
+            ref.read(inlineProvider(inline.id).notifier).toggleExpand();
           },
           child: inline.isBlockStart
               ? inline.isExpanded

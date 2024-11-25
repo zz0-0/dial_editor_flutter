@@ -1,14 +1,16 @@
 import 'dart:collection';
 
+import 'package:dial_editor_flutter/feature/document/domain/model/element.dart';
 import 'package:dial_editor_flutter/share/markdown_element.dart';
+import 'package:dial_editor_flutter/share/uuid.dart';
 import 'package:flutter/material.dart';
 
 abstract base class Inline extends LinkedListEntry<Inline> {
-  Inline({required this.key, required this.text, required this.renderText}) {
+  Inline({required this.id, required this.text, required this.renderText}) {
     textController.text = renderText;
   }
 
-  GlobalKey key;
+  ElementId id;
   String text;
   String renderText;
   TextEditingController textController = TextEditingController();
@@ -34,7 +36,8 @@ abstract base class Inline extends LinkedListEntry<Inline> {
   }
 
   Inline createNewLine() {
-    return TextNode(key: GlobalKey(), text: '', renderText: '');
+    final elementId = ElementId(uuid.v4(), ElementType.inline);
+    return TextNode(id: elementId, text: '', renderText: '');
   }
 
   void replaceInline(Inline oldInline, Inline newInline) {

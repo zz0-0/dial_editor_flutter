@@ -21,7 +21,6 @@
     - [ ] Heading (https://github.com/zz0-0/dial_editor/issues/34)
       - [ ] Heading block (https://github.com/zz0-0/dial_editor/issues/38)
       - [ ] Heading id (https://github.com/zz0-0/dial_editor/issues/35)
-      - [ ] Bidirectional link (https://github.com/zz0-0/dial_editor/issues/36)
     - [x] Bold
     - [x] Italic
     - [x] Bold Italic
@@ -53,6 +52,7 @@
     - [ ] Table of content (https://github.com/zz0-0/dial_editor/issues/10)
     - [ ] Video
     - [ ] Page breaks
+- [ ] **Bidirectional link** (https://github.com/zz0-0/dial_editor/issues/36)
 - [ ] **Keyboard Shortcut**
   - [ ] Ctrl A: Select All
   - [x] Key Arrow Up

@@ -20,7 +20,7 @@ class InlineListAsyncNotifier extends AsyncNotifier<List<Inline>> {
     final document = await GetDocumentUseCase(_documentGateway)();
     final inlines = document.inlines.toList();
     for (final inline in inlines) {
-      ref.read(inlineProvider(inline.key).notifier).initialize(inline);
+      ref.read(inlineProvider(inline.id).notifier).initialize(inline);
     }
     return inlines;
   }

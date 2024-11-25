@@ -1,5 +1,6 @@
 import 'package:dial_editor_flutter/feature/document/data/gateway_impl/inline_gateway_impl.dart';
 import 'package:dial_editor_flutter/feature/document/domain/gateway/gateway/inline_gateway.dart';
+import 'package:dial_editor_flutter/feature/document/domain/model/element.dart';
 import 'package:dial_editor_flutter/feature/document/domain/use_case/convert_line_use_case.dart';
 import 'package:dial_editor_flutter/share/markdown_element.dart';
 import 'package:dial_editor_flutter/share/provider/document/presentation/state_manager/inline_list_async_notifier_provider.dart';
@@ -8,12 +9,12 @@ import 'package:dial_editor_flutter/share/provider/document/presentation/state_m
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
+class InlineNotifier extends FamilyNotifier<Inline, ElementId> {
   late InlineGateway _inlineGateway;
 
   @override
-  Inline build(GlobalKey arg) {
-    return TextNode(key: arg, text: '', renderText: '');
+  Inline build(ElementId arg) {
+    return TextNode(id: arg, text: '', renderText: '');
   }
 
   // ignore: use_setters_to_change_properties
@@ -108,7 +109,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
       }
       inlineLinkedList.elementAt(i).isExpanded = state.isExpanded;
       ref
-          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .read(inlineProvider(inlineLinkedList.elementAt(i).id).notifier)
           .updateExpanded(isExpanded: inlineLinkedList.elementAt(i).isExpanded);
     }
   }
@@ -117,10 +118,10 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     final inlineLinkedList = state.list;
     for (var i = 0; i < inlineLinkedList!.length; i++) {
       ref
-          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .read(inlineProvider(inlineLinkedList.elementAt(i).id).notifier)
           .updateToEditngMode();
       ref
-          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .read(inlineProvider(inlineLinkedList.elementAt(i).id).notifier)
           .updateSelection(0, inlineLinkedList.elementAt(i).text.length);
     }
   }
@@ -129,10 +130,10 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     final inlineLinkedList = state.list;
     for (var i = 0; i < inlineLinkedList!.length; i++) {
       ref
-          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .read(inlineProvider(inlineLinkedList.elementAt(i).id).notifier)
           .updateToDisplayMode();
       ref
-          .read(inlineProvider(inlineLinkedList.elementAt(i).key).notifier)
+          .read(inlineProvider(inlineLinkedList.elementAt(i).id).notifier)
           .updateCursorOffset(inlineLinkedList.elementAt(i).renderText.length);
     }
   }
@@ -141,7 +142,7 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     if (state.text.isEmpty) {
       if (state.previous != null) {
         final previous = state.previous!;
-        ref.read(inlineProvider(previous.key).notifier).updateToEditngMode();
+        ref.read(inlineProvider(previous.id).notifier).updateToEditngMode();
         await ref.read(inlineListProvider.notifier).removeInline(state);
       }
     }
@@ -153,19 +154,19 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     final newWidget =
         ref.read(renderUtilProvider.notifier).render(context, newInline);
     ref
-        .read(inlineProvider(inline.key).notifier)
+        .read(inlineProvider(inline.id).notifier)
         .updateText(value, newInline.renderText);
     ref
-        .read(inlineProvider(inline.key).notifier)
+        .read(inlineProvider(inline.id).notifier)
         .updateTextStyle((newWidget as Text).style!);
     ref
-        .read(inlineProvider(inline.key).notifier)
+        .read(inlineProvider(inline.id).notifier)
         .updateCursorOffset(inline.textController.selection.baseOffset);
   }
 
   Future<void> onSubmit() async {
     final newLine = state.createNewLine();
-    ref.read(inlineProvider(newLine.key).notifier).initialize(newLine);
+    ref.read(inlineProvider(newLine.id).notifier).initialize(newLine);
     await ref.read(inlineListProvider.notifier).createNewLine(state, newLine);
     if (state is OrderedListNode) {
       final match = MarkdownPattern.orderListRegex.firstMatch(state.text);
@@ -190,42 +191,42 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
             num++;
             ref
                 .read(
-                  inlineProvider(inlineLinkedList.elementAt(i).key).notifier,
+                  inlineProvider(inlineLinkedList.elementAt(i).id).notifier,
                 )
                 .updateText('$num. ', '$num. ');
           }
         }
       }
-      ref.read(inlineProvider(newLine.key).notifier).updateToEditngMode();
+      ref.read(inlineProvider(newLine.id).notifier).updateToEditngMode();
     }
   }
 
   void onArrowUp() {
     if (state.previous != null) {
-      ref.read(inlineProvider(state.key).notifier).resetAll();
+      ref.read(inlineProvider(state.id).notifier).resetAll();
       ref
-          .read(inlineProvider(state.previous!.key).notifier)
+          .read(inlineProvider(state.previous!.id).notifier)
           .updateToEditngMode();
-      ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+      ref.read(inlineProvider(state.id).notifier).updateToDisplayMode();
     }
   }
 
   void onArrowDown() {
     if (state.next != null) {
-      ref.read(inlineProvider(state.key).notifier).resetAll();
-      ref.read(inlineProvider(state.next!.key).notifier).updateToEditngMode();
-      ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+      ref.read(inlineProvider(state.id).notifier).resetAll();
+      ref.read(inlineProvider(state.next!.id).notifier).updateToEditngMode();
+      ref.read(inlineProvider(state.id).notifier).updateToDisplayMode();
     }
   }
 
   void onArrowLeft({required bool isShiftPressed}) {
     if (state.textController.selection.extentOffset == 0) {
       if (state.previous != null) {
-        ref.read(inlineProvider(state.key).notifier).resetAll();
+        ref.read(inlineProvider(state.id).notifier).resetAll();
         ref
-            .read(inlineProvider(state.previous!.key).notifier)
+            .read(inlineProvider(state.previous!.id).notifier)
             .updateToEditngMode();
-        ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+        ref.read(inlineProvider(state.id).notifier).updateToDisplayMode();
       }
     }
   }
@@ -234,12 +235,10 @@ class InlineNotifier extends FamilyNotifier<Inline, GlobalKey> {
     if (state.textController.selection.extentOffset ==
         state.textController.text.length) {
       if (state.next != null) {
-        ref.read(inlineProvider(state.key).notifier).resetAll();
-        ref
-            .read(inlineProvider(state.next!.key).notifier)
-            .updateCursorOffset(0);
-        ref.read(inlineProvider(state.next!.key).notifier).updateToEditngMode();
-        ref.read(inlineProvider(state.key).notifier).updateToDisplayMode();
+        ref.read(inlineProvider(state.id).notifier).resetAll();
+        ref.read(inlineProvider(state.next!.id).notifier).updateCursorOffset(0);
+        ref.read(inlineProvider(state.next!.id).notifier).updateToEditngMode();
+        ref.read(inlineProvider(state.id).notifier).updateToDisplayMode();
       }
     }
   }

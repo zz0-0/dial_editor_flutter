@@ -33,7 +33,7 @@ class _DisplayState extends ConsumerState<Display> {
       child: GestureDetector(
         onTap: () {
           ref
-              .read(inlineProvider(widget.inline.key).notifier)
+              .read(inlineProvider(widget.inline.id).notifier)
               .updateToEditngMode();
         },
         child: displayWidget,

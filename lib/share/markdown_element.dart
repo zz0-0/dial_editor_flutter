@@ -32,4 +32,3 @@ export 'package:dial_editor_flutter/feature/document/domain/model/element/inline
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/table/table_line.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/element/inline/text_node.dart';
 export 'package:dial_editor_flutter/feature/document/domain/model/markdown_pattern.dart';
-export 'package:dial_editor_flutter/feature/document/domain/model/node.dart';

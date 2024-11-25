@@ -1,16 +1,19 @@
+import 'package:dial_editor_flutter/feature/document/domain/model/element.dart';
 import 'package:dial_editor_flutter/share/markdown_element.dart';
+import 'package:dial_editor_flutter/share/uuid.dart';
 import 'package:flutter/material.dart';
 
 base class Quote extends Inline {
   Quote({
-    required super.key,
+    required super.id,
     required super.text,
     required super.renderText,
   });
 
   @override
   Inline createNewLine() {
-    return Quote(key: GlobalKey(), text: '> ', renderText: '> ');
+    final elementId = ElementId(uuid.v4(), ElementType.inline);
+    return Quote(id: elementId, text: '> ', renderText: '> ');
   }
 
   @override
@@ -27,7 +30,7 @@ base class Quote extends Inline {
     String? renderText,
   }) {
     final inline = Quote(
-      key: key,
+      id: id,
       text: text ?? this.text,
       renderText: renderText ?? this.renderText,
     )

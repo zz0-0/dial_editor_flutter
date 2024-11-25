@@ -1,16 +1,19 @@
+import 'package:dial_editor_flutter/feature/document/domain/model/element.dart';
 import 'package:dial_editor_flutter/share/markdown_element.dart';
+import 'package:dial_editor_flutter/share/uuid.dart';
 import 'package:flutter/material.dart';
 
 base class UnorderedListNode extends Inline {
   UnorderedListNode({
-    required super.key,
+    required super.id,
     required super.text,
     required super.renderText,
   });
 
   @override
   Inline createNewLine() {
-    return UnorderedListNode(key: GlobalKey(), text: '- ', renderText: '- ');
+    final elementId = ElementId(uuid.v4(), ElementType.inline);
+    return UnorderedListNode(id: elementId, text: '- ', renderText: '- ');
   }
 
   @override
@@ -27,7 +30,7 @@ base class UnorderedListNode extends Inline {
     String? renderText,
   }) {
     final inline = TaskListNode(
-      key: key,
+      id: id,
       text: text ?? this.text,
       renderText: renderText ?? this.renderText,
     )

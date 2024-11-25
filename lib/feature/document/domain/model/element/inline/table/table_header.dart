@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 base class TableHeader extends Inline {
   TableHeader({
-    required super.key,
+    required super.id,
     required super.text,
     required super.renderText,
   });
@@ -27,6 +27,6 @@ base class TableHeader extends Inline {
 
   @override
   Inline createNewLine() {
-    return TableLine(key: key, text: '', renderText: '');
+    return TableLine(id: id, text: '', renderText: '');
   }
 }

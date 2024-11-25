@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LineNumber extends ConsumerWidget {
-  const LineNumber({required this.index, required this.inline, super.key});
+  const LineNumber({
+    required this.index,
+    required this.inline,
+    super.key,
+  });
 
   final int index;
   final Inline inline;

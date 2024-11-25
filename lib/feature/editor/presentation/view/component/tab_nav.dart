@@ -17,7 +17,7 @@ class _TabNavState extends ConsumerState<TabNav> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final openedFiles = ref.watch(openedFilesProvider);
-    final key = ref.watch(fileKeyProvider);
+    final id = ref.watch(fileIdProvider);
     final tabs = openedFiles.values
         .map(
           (path) => Row(
@@ -37,8 +37,8 @@ class _TabNavState extends ConsumerState<TabNav> with TickerProviderStateMixin {
     tabController = TabController(length: openedFiles.length, vsync: this);
 
     // switch tab when tap different file on file tree
-    if (key != null) {
-      final file = ref.watch(fileProvider(key));
+    if (id != null) {
+      final file = ref.watch(fileProvider(id));
       if (file != null) {
         final index = openedFiles.values.toList().indexOf(file.path);
         if (index != -1) {
@@ -61,9 +61,9 @@ class _TabNavState extends ConsumerState<TabNav> with TickerProviderStateMixin {
       onTap: (index) {
         tabController!.index = index;
         tabController!.animateTo(index);
-        final key = openedFiles.keys.toList()[index];
-        ref.read(fileKeyProvider.notifier).state = key;
-        ref.read(fileProvider(key).notifier).state =
+        final id = openedFiles.keys.toList()[index];
+        ref.read(fileIdProvider.notifier).state = id;
+        ref.read(fileProvider(id).notifier).state =
             File(openedFiles.values.toList()[index]);
       },
     );

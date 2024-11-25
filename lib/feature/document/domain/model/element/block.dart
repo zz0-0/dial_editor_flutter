@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:dial_editor_flutter/feature/document/domain/model/element.dart';
 
 abstract base class Block {
-  Block({required this.key, required this.level});
+  Block({required this.id, required this.level});
 
-  GlobalKey key;
+  ElementId id;
   int level;
   bool isExpanded = true;
 }

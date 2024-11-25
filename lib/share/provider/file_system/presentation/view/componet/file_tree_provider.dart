@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final fileProvider = StateProvider.family<File?, GlobalKey>((ref, key) => null);
-final fileKeyProvider = StateProvider<GlobalKey?>((ref) => null);
+final fileProvider = StateProvider.family<File?, String>((ref, id) => null);
+final fileIdProvider = StateProvider<String?>((ref) => null);
