@@ -78,7 +78,7 @@ class RenderUtilNotifier extends Notifier<void> {
           decoration: TextDecoration.lineThrough,
         );
 
-      case Link:
+      case LinkNode:
         return baseStyle.copyWith(
           color: Colors.blue,
           decoration: TextDecoration.underline,

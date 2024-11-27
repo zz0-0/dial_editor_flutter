@@ -144,7 +144,7 @@ class InlineGatewayImpl implements InlineGateway {
         (String line) {
           final match = MarkdownPattern.linkRegex.firstMatch(line)!;
           final linkText = match.group(1)!;
-          return Link(
+          return LinkNode(
             id: elementId,
             text: line,
             renderText: linkText,

@@ -1,15 +1,15 @@
 import 'package:dial_editor_flutter/share/markdown_element.dart';
 import 'package:flutter/material.dart';
 
-base class Link extends Inline {
-  Link({
+base class LinkNode extends Inline {
+  LinkNode({
     required super.id,
     required super.text,
     required super.renderText,
   });
 
   @override
-  Link copyWith({
+  LinkNode copyWith({
     TextStyle? textStyle,
     double? lineHeight,
     bool? isEditing,
@@ -21,7 +21,7 @@ base class Link extends Inline {
     String? text,
     String? renderText,
   }) {
-    final inline = Link(
+    final inline = LinkNode(
       id: id,
       text: text ?? this.text,
       renderText: renderText ?? this.renderText,

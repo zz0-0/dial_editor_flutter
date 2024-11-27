@@ -5,6 +5,7 @@ class ConvertLineUseCase {
   ConvertLineUseCase(this._inlineGateway);
 
   final InlineGateway _inlineGateway;
+  
   Inline call(String line) {
     return _inlineGateway.convert(line);
   }

@@ -11,6 +11,12 @@ dependencies:
     sdk: flutter
   flutter_riverpod: "^2.6.1"
   pubspec_dependency_sorter: "^1.0.5"
+  tekartik_app_flutter_sembast:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_sembast
+    version: ">=0.1.0"
   uuid: ^4.5.1
 dev_dependencies:
   flutter_lints: "^4.0.0"
